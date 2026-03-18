@@ -1,10 +1,17 @@
-<app-navbar></app-navbar>
-<main>
-  <router-outlet>
+@if (isLocked()) {
+  <app-lock-screen
+    (unlocked)="onUnlocked()"
+    (dragProgressChange)="onDragProgress($event)" />
+}
+
+<app-navbar [unlocked]="hasUnlocked()" />
+
+<div [style.filter]="'blur(' + blurAmount() + 'px)'" [style.transition]="'filter 0.05s linear'">
+  <main>
     <app-hero></app-hero>
     <app-about-me></app-about-me>
     <app-projects></app-projects>
     <app-contact></app-contact>
-  </router-outlet>
-</main>
-<footer>&copy; Tomas Portfolio</footer>
+  </main>
+  <footer>&copy; Tomas Portfolio</footer>
+</div>

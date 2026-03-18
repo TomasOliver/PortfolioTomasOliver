@@ -1,0 +1,36 @@
+<div class="lock-screen" [class.leaving]="isLeaving()"
+  [style.transform]="!isLeaving() ? 'translateY(-' + dragOffset() + 'px)' : ''" (mousedown)="onMouseDown($event)"
+  (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd()">
+
+  <!-- Fondo con orbes de luz difusa -->
+  <div class="bg-overlay"></div>
+
+  <!-- Tarjeta liquid glass -->
+  <div class="glass-card">
+
+    <!-- Capas decorativas -->
+    <div class="glass-tint"></div>
+    <div class="glass-shine-top"></div>
+    <div class="glass-reflect"></div>
+    <div class="glass-shine-bottom"></div>
+
+    <!-- Contenido -->
+    <div class="content">
+      <p class="greeting">Bienvenido a mi portfolio</p>
+      <h1 class="time">{{ currentTime() }}</h1>
+      <p class="date">{{ currentDate() }}</p>
+    </div>
+
+  </div>
+
+  <!-- Hint de swipe — fuera de la tarjeta -->
+  <div class="swipe-hint" [style.opacity]="1 - dragProgress()">
+    <div class="swipe-arrow">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <p>Deslizá hacia arriba</p>
+  </div>
+
+</div>

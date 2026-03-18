@@ -36,7 +36,7 @@ export class Projects {
       tags: ['Lenguaje C', 'Algoritmos', 'Estructuras de Datos'],
       image: 'assets/images/futbol-c.png', // Pon una captura de tu CMD
       // AQUÍ IRÁ TU LINK DE REPLIT (Ejemplo genérico)
-      demoUrl: 'https://replit.com/@tucousuario/SimuladorFutbol?embed=true',
+      demoUrl: 'https://replit.com/@TomasOliver/TP-FINAL-SIFU-Simulador-fulbo-mainzip?embed=true&run=1&v=500',
       type: 'console'
     },
     {
