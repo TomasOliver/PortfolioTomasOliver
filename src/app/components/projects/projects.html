@@ -1,164 +1,171 @@
 <section id="proyectos" class="min-h-screen py-20 px-6 scroll-mt-20">
-  <div class="max-w-7xl mx-auto">
+    <div class="max-w-7xl mx-auto">
 
-    <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center animate-fade-in">
-      Mis <span class="text-indigo-400">Proyectos</span>
-    </h2>
+        <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center animate-fade-in">
+            Mis <span class="text-indigo-400">Proyectos</span>
+        </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      @for (project of projects; track project.id) {
-        <div class="group relative bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-lg"
-             (click)="openProject(project)">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (project of projects; track project.id) {
+            <div class="group relative bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-lg"
+                (click)="openProject(project)">
 
-          <div class="h-48 bg-slate-800 overflow-hidden relative">
-            <img [src]="project.image" [alt]="project.title"
-                 class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
-            <div class="absolute inset-0 bg-indigo-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span class="text-white font-bold px-4 py-2 border-2 border-white rounded-full">
-                {{ project.type === 'web' ? 'Ver Demo Live' : 'Ver Proyecto' }}
-              </span>
+                <div class="h-48 bg-slate-800 overflow-hidden relative">
+                    <img [src]="project.image" [alt]="project.title"
+                        class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                    <div
+                        class="absolute inset-0 bg-indigo-900/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="text-white font-bold px-4 py-2 border-2 border-white rounded-full">
+                            {{ project.type === 'web' ? 'Ver Demo Live' : 'Ver Proyecto' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-white mb-2">{{ project.title }}</h3>
+                    <p class="text-slate-400 text-sm line-clamp-3 mb-4">{{ project.description }}</p>
+                    <div class="flex flex-wrap gap-2">
+                        @for (tag of project.tags; track tag) {
+                        <span
+                            class="text-xs font-medium px-2 py-1 rounded bg-slate-800 text-indigo-300 border border-slate-700">
+                            {{ tag }}
+                        </span>
+                        }
+                    </div>
+                </div>
+
             </div>
-          </div>
-
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-white mb-2">{{ project.title }}</h3>
-            <p class="text-slate-400 text-sm line-clamp-3 mb-4">{{ project.description }}</p>
-            <div class="flex flex-wrap gap-2">
-              @for (tag of project.tags; track tag) {
-                <span class="text-xs font-medium px-2 py-1 rounded bg-slate-800 text-indigo-300 border border-slate-700">
-                  {{ tag }}
-                </span>
-              }
-            </div>
-          </div>
-
+            }
         </div>
-      }
-    </div>
 
-  </div>
+    </div>
 </section>
 
 <!-- Modal -->
 @if (isModalOpen()) {
-  <div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in">
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in">
 
     <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" (click)="closeModal()"></div>
 
-    <div class="relative w-full max-w-5xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden animate-scale-up">
+    <div
+        class="relative w-full max-w-5xl bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden animate-scale-up">
 
-      <!-- Header -->
-      <div class="flex items-center justify-between px-6 py-4 bg-slate-950 border-b border-slate-800">
-        <div>
-          <h3 class="text-xl font-bold text-white">{{ currentProject()?.title }}</h3>
-        </div>
-        <button (click)="closeModal()"
-                class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-
-      <!-- Contenido -->
-      <div class="flex flex-col md:flex-row h-auto md:h-[70vh]">
-
-        <!-- Galería / iframe -->
-        <div class="relative flex-1 bg-slate-950 flex items-center justify-center overflow-hidden">
-
-          @if (showDemo() && safeUrl()) {
-            <div class="absolute inset-0 flex items-center justify-center text-slate-500">Cargando demo...</div>
-            <iframe [src]="safeUrl()" class="w-full h-full relative z-10" frameborder="0" allowfullscreen></iframe>
-
-          } @else {
-            <img [src]="currentProject()?.images?.[currentImageIndex()]"
-                 [alt]="currentProject()?.title"
-                 class="max-h-full max-w-full object-contain transition-opacity duration-300">
-
-            @if ((currentProject()?.images?.length ?? 0) > 1) {
-              <button (click)="prevImage()"
-                      class="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-              </button>
-              <button (click)="nextImage()"
-                      class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-              </button>
-
-              <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                @for (img of currentProject()?.images; track $index) {
-                  <button (click)="currentImageIndex.set($index)"
-                          [class]="'w-2 h-2 rounded-full transition-all ' + ($index === currentImageIndex() ? 'bg-indigo-400 w-4' : 'bg-slate-600')">
-                  </button>
-                }
-              </div>
-            }
-          }
-
-        </div>
-
-        <!-- Info lateral -->
-        <div class="w-full md:w-72 p-6 flex flex-col gap-4 border-t md:border-t-0 md:border-l border-slate-800 overflow-y-auto">
-
-          <div>
-            <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Descripción</p>
-            <p class="text-slate-300 text-sm leading-relaxed">{{ currentProject()?.description }}</p>
-          </div>
-
-          <div>
-            <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Tecnologías</p>
-            <div class="flex flex-wrap gap-2">
-              @for (tag of currentProject()?.tags; track tag) {
-                <span class="text-xs px-2 py-1 rounded bg-slate-800 text-indigo-300 border border-slate-700">
-                  {{ tag }}
-                </span>
-              }
+        <!-- Header -->
+        <div class="flex items-center justify-between px-6 py-4 bg-slate-950 border-b border-slate-800">
+            <div>
+                <h3 class="text-xl font-bold text-white">{{ currentProject()?.title }}</h3>
             </div>
-          </div>
-
-          <!-- Botones -->
-          <div class="mt-auto flex flex-col gap-3">
-
-            @if (currentProject()?.demoUrl && !showDemo()) {
-              <button (click)="playDemo()"
-                      class="flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            <button (click)="closeModal()"
+                class="p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                Jugar Demo Live
-              </button>
-            }
-
-            @if (currentProject()?.demoUrl && showDemo()) {
-              <button (click)="showDemo.set(false)"
-                      class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-                Ver Capturas
-              </button>
-            }
-
-            @if (currentProject()?.githubUrl) {
-              <a [href]="currentProject()?.githubUrl" target="_blank"
-                 (click)="$event.stopPropagation()"
-                 class="flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/>
-                </svg>
-                Ver en GitHub
-              </a>
-            }
-
-          </div>
+            </button>
         </div>
 
-      </div>
+        <!-- Contenido -->
+        <div class="flex flex-col md:flex-row h-auto md:h-[70vh]">
+
+            <!-- Galería / iframe -->
+            <div class="relative flex-1 bg-slate-950 flex items-center justify-center overflow-hidden">
+
+                @if (showDemo() && safeUrl()) {
+                <div class="absolute inset-0 flex items-center justify-center text-slate-500">Cargando demo...</div>
+                <iframe [src]="safeUrl()" class="w-full h-full relative z-10" frameborder="0" allowfullscreen></iframe>
+
+                } @else {
+                <img [src]="currentProject()?.images?.[currentImageIndex()]" [alt]="currentProject()?.title"
+                    class="max-h-full max-w-full object-contain transition-opacity duration-300">
+
+                @if ((currentProject()?.images?.length ?? 0) > 1) {
+                <button (click)="prevImage()"
+                    class="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button (click)="nextImage()"
+                    class="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-all">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+
+                <div class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                    @for (img of currentProject()?.images; track $index) {
+                    <button (click)="currentImageIndex.set($index)"
+                        [class]="'w-2 h-2 rounded-full transition-all ' + ($index === currentImageIndex() ? 'bg-indigo-400 w-4' : 'bg-slate-600')">
+                    </button>
+                    }
+                </div>
+                }
+                }
+
+            </div>
+
+            <!-- Info lateral -->
+            <div
+                class="w-full md:w-72 p-6 flex flex-col gap-4 border-t md:border-t-0 md:border-l border-slate-800 overflow-y-auto">
+
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Descripción</p>
+                    <p class="text-slate-300 text-sm leading-relaxed">{{ currentProject()?.description }}</p>
+                </div>
+
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider mb-2">Tecnologías</p>
+                    <div class="flex flex-wrap gap-2">
+                        @for (tag of currentProject()?.tags; track tag) {
+                        <span class="text-xs px-2 py-1 rounded bg-slate-800 text-indigo-300 border border-slate-700">
+                            {{ tag }}
+                        </span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="mt-auto flex flex-col gap-3">
+
+                    @if (currentProject()?.demoUrl && !showDemo()) {
+                    <a [href]="currentProject()?.demoUrl" target="_blank" (click)="playDemo(); $event.preventDefault()"
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Jugar Demo Live
+                    </a>
+                    }
+
+                    @if (currentProject()?.demoUrl && showDemo()) {
+                    <button (click)="showDemo.set(false)"
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl transition-all">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        Ver Capturas
+                    </button>
+                    }
+
+                    @if (currentProject()?.githubUrl) {
+                    <a [href]="currentProject()?.githubUrl" target="_blank" (click)="$event.stopPropagation()"
+                        class="flex items-center justify-center gap-2 px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12" />
+                        </svg>
+                        Ver en GitHub
+                    </a>
+                    }
+
+                </div>
+            </div>
+
+        </div>
     </div>
-  </div>
+</div>
 }
