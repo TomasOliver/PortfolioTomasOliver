@@ -3,7 +3,7 @@
   <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-indigo-900/20 to-transparent -z-10"></div>
 
   <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-    
+
     <div class="space-y-8 animate-fade-in-up">
       <div>
         <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">
@@ -15,7 +15,7 @@
       </div>
 
       <div class="space-y-6">
-        
+
         <div class="flex items-center gap-4">
           <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-indigo-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,11 +58,10 @@
       </div>
     </div>
 
-
     <div class="bg-slate-900/50 backdrop-blur-xl border border-slate-800 p-8 rounded-3xl shadow-2xl animate-fade-in-up delay-200 hover:border-indigo-500/50">
-      
-      <form action="https://formspree.io/f/TU_FORM_ID" method="POST" class="space-y-6">
-        
+
+      <form (submit)="onSubmit($event)" class="space-y-6">
+
         <div class="group">
           <label for="name" class="block text-sm font-medium text-slate-400 mb-2 group-focus-within:text-indigo-400 transition-colors">Tu Nombre</label>
           <input type="text" name="name" id="name" required
@@ -84,9 +83,29 @@
                     placeholder="Hola Tomás, me gustaría entrevistarte para..."></textarea>
         </div>
 
-        <button type="submit" 
-                class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] transition-all duration-300">
-          Enviar Mensaje
+        <!-- Mensaje de éxito -->
+        @if (isSent()) {
+          <div class="flex items-center gap-3 px-4 py-3 bg-emerald-900/40 border border-emerald-700 rounded-xl text-emerald-400">
+            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span class="text-sm font-medium">¡Mensaje enviado! Te responderé pronto.</span>
+          </div>
+        }
+
+        <!-- Mensaje de error -->
+        @if (hasError()) {
+          <div class="flex items-center gap-3 px-4 py-3 bg-red-900/40 border border-red-700 rounded-xl text-red-400">
+            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <span class="text-sm font-medium">Hubo un error. Intentá de nuevo o escribime por email.</span>
+          </div>
+        }
+
+        <button type="submit" [disabled]="isSending()"
+                class="w-full bg-gradient-to-r from-indigo-600 to-cyan-600 text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-indigo-500/25 hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
+          {{ isSending() ? 'Enviando...' : 'Enviar Mensaje' }}
         </button>
 
       </form>
