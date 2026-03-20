@@ -62,39 +62,6 @@
 
       <div class="flex items-center gap-3">
 
-        <!-- Switch dark/light -->
-        <button (click)="toggleTheme()" [class]="'relative flex items-center rounded-full border transition-all duration-500 ' +
-                 (isScrolled() && !isHovered() ? 'w-12 h-6 p-0.5' : 'w-14 h-7 p-1') + ' ' +
-                 (isDark() ? 'bg-slate-700 border-slate-600' : 'bg-indigo-100 border-indigo-200')"
-          [attr.aria-label]="isDark() ? 'Activar modo claro' : 'Activar modo oscuro'"
-          [title]="isDark() ? 'Modo claro' : 'Modo oscuro'">
-
-          <!-- Ícono luna -->
-          <svg [class]="'absolute transition-all duration-300 ' +
-                      (isScrolled() && !isHovered() ? 'w-3 h-3 left-1.5' : 'w-3.5 h-3.5 left-2') + ' ' +
-                      (isDark() ? 'opacity-100 text-indigo-300' : 'opacity-0')" fill="currentColor"
-            viewBox="0 0 24 24">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-          </svg>
-
-          <!-- Ícono sol -->
-          <svg [class]="'absolute transition-all duration-300 ' +
-                      (isScrolled() && !isHovered() ? 'w-3 h-3 right-1.5' : 'w-3.5 h-3.5 right-2') + ' ' +
-                      (isDark() ? 'opacity-0' : 'opacity-100 text-indigo-500')" fill="currentColor"
-            viewBox="0 0 24 24">
-            <path
-              d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h4z" />
-          </svg>
-
-          <!-- Thumb deslizante -->
-          <span [class]="'block rounded-full shadow-md transition-all duration-500 ' +
-                       (isScrolled() && !isHovered() ? 'w-4 h-4' : 'w-5 h-5') + ' ' +
-                       (isDark() ? 'translate-x-0 bg-slate-200' : 'bg-white')"
-            [style]="isDark() ? '' : 'transform: translateX(' + (isScrolled() && !isHovered() ? '22px' : '26px') + ')'">
-          </span>
-
-        </button>
-
         <!-- Hamburguesa mobile -->
         <button (click)="toggleMenu()" class="md:hidden text-slate-300 hover:text-white transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg"

@@ -7,9 +7,11 @@ interface Project {
   title: string;
   description: string;
   tags: string[];
-  image: string;     // Captura de pantalla para la tarjeta
-  demoUrl: string;   // URL del proyecto (Replit o Web)
-  type: 'web' | 'console'; // Para saber si mostrar pantalla completa o terminal
+  image: string;
+  githubUrl?: string;
+  demoUrl?: string;
+  images?: string[];  // ← galería de fotos
+  type: 'web' | 'console';
 }
 
 @Component({
@@ -22,52 +24,112 @@ export class Projects {
 
   private sanitizer = inject(DomSanitizer);
 
-  // Estado del Modal
   isModalOpen = signal(false);
   currentProject = signal<Project | null>(null);
   safeUrl = signal<SafeResourceUrl | null>(null);
+  currentImageIndex = signal(0); // ← índice de la galería
 
-  // TUS PROYECTOS (Aquí cargarás tu data real)
   projects: Project[] = [
     {
       id: 1,
       title: 'Simulador de Fútbol',
-      description: 'Simulación lógica de partidos y torneos desarrollada puramente en C. Gestión de memoria manual y algoritmos de probabilidad.',
+      description: 'Simulación lógica de partidos y torneos desarrollada puramente en C. Gestión de memoria manual y algoritmos de probabilidad para determinar resultados realistas.',
       tags: ['Lenguaje C', 'Algoritmos', 'Estructuras de Datos'],
-      image: 'assets/images/futbol-c.png', // Pon una captura de tu CMD
-      // AQUÍ IRÁ TU LINK DE REPLIT (Ejemplo genérico)
-      demoUrl: 'https://replit.com/@TomasOliver/TP-FINAL-SIFU-Simulador-fulbo-mainzip?embed=true&run=1&v=500',
+      image: 'images/SifuEnC.jpeg',
+      githubUrl: 'https://github.com/TomasOliver/Tp-final-laboratorio1',
+      images: [
+        'images/SifuCPortada.jpeg',
+        'images/SifuCMenuPrincipal.jpeg',
+        'images/SifuCMenuJugar.jpeg',
+        'images/SifuCAmistoso.jpeg',
+        'images/SifuCAmistosoResultado.jpeg',
+        'images/SifuCMenuTorneo.jpeg',
+        'images/SifuCFecha2.jpeg',
+        'images/SifuCFecha2Resultado.jpeg',
+        'images/SifuCFecha2Tabla.jpeg',
+        'images/SifuCMenuGuardado.jpeg',
+      ],
       type: 'console'
     },
     {
       id: 2,
-      title: 'Sistema de Gestión (S.I.F.U)',
-      description: 'Aplicación web completa con Angular 19 y Tailwind para la gestión de usuarios y recursos.',
-      tags: ['Angular', 'TypeScript', 'Tailwind'],
-      image: 'assets/images/sifu-web.png',
-      demoUrl: 'https://tu-proyecto-angular.vercel.app', // Ejemplo
-      type: 'web'
+      title: 'S.I.F.U Copa America Version',
+      description: 'Sistema de gestión desarrollado en Java con interfaz de terminal. Permite administrar usuarios, recursos y generar reportes.',
+      tags: ['Java', 'POO', 'Terminal'],
+      image: 'images/SifuJava.jpeg',
+      githubUrl: 'https://github.com/Wuttenberg/S.I.F.U-Copa-America-Version',
+      images: [
+        'images/SifuJavaMenuPrincipal.jpeg',
+        'images/SifuJavaSimulacionGrupos.jpeg',
+        'images/SifuJavaResultadoPartido.jpeg',
+        'images/SifuJavaTabla.jpeg',
+        'images/UMLSifu.png',
+        
+      ],
+      type: 'console'
+    },
+    {
+      id: 3,
+      title: 'S.I.F.U Web Premier League',
+      description: 'Aplicación web desarrollada en Angular donde podés armar tu equipo, elegir formaciones y simular partidos como director técnico. Utiliza una base de datos en JSON con jugadores reales.',
+      tags: ['Angular', 'TypeScript', 'CSS', 'JSON'],
+      image: 'images/SifuAngular.jpeg',
+      githubUrl: 'https://github.com/TomasOliver/SifuWebTest',
+      demoUrl: 'https://sifu-web-test.vercel.app',
+      images: [
+        'images/SifuWebLogin.jpeg',
+        'images/SifuWebInicio.jpeg',
+        'images/SifuWebFixture.jpeg',
+        'images/SifuWebTabla.jpeg',
+        'images/SifuWebEstadisticas.jpeg',
+        'images/SifuWebPreviaTorneo.jpeg',
+        'images/SifuWebSimularPartidoCompleto.jpeg',
+        'images/SifuWebSimularPartidoRapido.jpeg',
+        'images/SifuWebInicioCampeon.jpeg',
+        'images/SifuWebPanelAdmin.jpeg',
+        'images/SifuWebPanelAgregarJugador.jpeg',
+        'images/SifuWebGestorBaseDeDatos.jpeg',
+        
+      ],
+      type: 'console'
     }
   ];
 
-  // Abrir Modal
+  showDemo = signal(false);
+
   openProject(project: Project) {
     this.currentProject.set(project);
-    // Sanitizamos la URL para que Angular confíe en ella
-    this.safeUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(project.demoUrl));
+    this.currentImageIndex.set(0);
+    this.showDemo.set(false);
+    this.safeUrl.set(null); // ← no seteamos la URL hasta que se apriete el botón
     this.isModalOpen.set(true);
-    // Bloquear scroll del body
     document.body.style.overflow = 'hidden';
   }
 
-  // Cerrar Modal
   closeModal() {
     this.isModalOpen.set(false);
     this.currentProject.set(null);
     this.safeUrl.set(null);
-    // Reactivar scroll del body
+    this.currentImageIndex.set(0);
+    this.showDemo.set(false); // ← reset
     document.body.style.overflow = 'auto';
   }
 
+  playDemo() {
+    const url = this.currentProject()?.demoUrl;
+    if (url) {
+      this.safeUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url));
+    }
+    this.showDemo.set(true);
+  }
 
+  nextImage() {
+    const images = this.currentProject()?.images ?? [];
+    this.currentImageIndex.update(i => (i + 1) % images.length);
+  }
+
+  prevImage() {
+    const images = this.currentProject()?.images ?? [];
+    this.currentImageIndex.update(i => (i - 1 + images.length) % images.length);
+  }
 }
