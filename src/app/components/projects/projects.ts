@@ -36,7 +36,7 @@ export class Projects {
       description: 'Simulación lógica de partidos y torneos desarrollada puramente en C. Gestión de memoria manual y algoritmos de probabilidad para determinar resultados realistas.',
       tags: ['Lenguaje C', 'Algoritmos', 'Estructuras de Datos'],
       image: 'images/SifuEnC.jpeg',
-      githubUrl: 'https://github.com/TomasOliver/Tp-final-laboratorio1',
+      githubUrl: 'https://github.com/TomasOliver/TP-FINAL-SIFU-Simulador-fulbo-',
       images: [
         'images/SifuCPortada.jpeg',
         'images/SifuCMenuPrincipal.jpeg',
